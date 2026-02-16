@@ -1,0 +1,50 @@
+{
+  "name": "@junctionrelay/plugin-raw-json",
+  "version": "1.0.0",
+  "description": "Pass-through flat sensor dictionary as JSON",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "junctionrelay": {
+    "type": "payload",
+    "payloadName": "junctionrelay.raw-json",
+    "entry": "dist/index.js",
+    "displayName": "Raw JSON",
+    "description": "Pass-through flat sensor dictionary as JSON",
+    "category": "Data",
+    "emoji": "📋",
+    "fields": {
+      "configurable": ["includeTimestamp", "includeMetadata"]
+    },
+    "defaults": {
+      "includeTimestamp": true,
+      "includeMetadata": false
+    },
+    "outputContentType": "application/json",
+    "outputDescription": "Flat JSON object with sensor tags as keys",
+    "authorName": "JunctionRelay"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
+    "pack": "node ../../scripts/pack.mjs",
+    "clean": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "@junctionrelay/payload-sdk": "1.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catapultcase/JunctionRelay_Protocols.git",
+    "directory": "plugins/junctionrelay.raw-json"
+  }
+}

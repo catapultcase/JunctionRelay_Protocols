@@ -1,0 +1,44 @@
+{
+  "name": "@junctionrelay/plugin-jr-protocol",
+  "version": "1.0.0",
+  "description": "JunctionRelay Server protocol for device communication",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "junctionrelay": {
+    "type": "payload",
+    "payloadName": "junctionrelay.jr-protocol",
+    "entry": "dist/index.js",
+    "displayName": "JR Protocol",
+    "description": "JunctionRelay Server protocol for device communication",
+    "category": "Protocol",
+    "emoji": "🔌",
+    "profiles": ["lvgl-grid", "lvgl-radio", "lvgl-plotter", "quad", "matrix", "neopixel"],
+    "outputContentType": "application/json",
+    "outputDescription": "JR sensor/config payload for LVGL, matrix, and NeoPixel devices",
+    "authorName": "JunctionRelay"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
+    "pack": "node ../../scripts/pack.mjs",
+    "clean": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "@junctionrelay/payload-sdk": "1.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catapultcase/JunctionRelay_Protocols.git",
+    "directory": "plugins/junctionrelay.jr-protocol"
+  }
+}

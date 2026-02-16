@@ -1,0 +1,43 @@
+{
+  "name": "@junctionrelay/plugin-xsd-protocol",
+  "version": "1.0.0",
+  "description": "XSD dictionarySensors format for device communication",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "junctionrelay": {
+    "type": "payload",
+    "payloadName": "junctionrelay.xsd-protocol",
+    "entry": "dist/index.js",
+    "displayName": "XSD Protocol",
+    "description": "XSD dictionarySensors format for device communication",
+    "category": "Protocol",
+    "emoji": "📡",
+    "outputContentType": "application/json",
+    "outputDescription": "XSD sensor payload with dictionarySensors/unmappedSensors structure",
+    "authorName": "JunctionRelay"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
+    "pack": "node ../../scripts/pack.mjs",
+    "clean": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "@junctionrelay/payload-sdk": "1.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catapultcase/JunctionRelay_Protocols.git",
+    "directory": "plugins/junctionrelay.xsd-protocol"
+  }
+}
