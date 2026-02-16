@@ -4,7 +4,7 @@ export default {
   metadata: {
     payloadName: 'junctionrelay.xsd-protocol',
     displayName: 'XSD Protocol',
-    description: 'XSD dictionarySensors format for device communication',
+    description: 'JunctionRelay XSD dictionarySensors format for device communication',
     category: 'Protocol',
     emoji: '📡',
     outputContentType: 'application/json',

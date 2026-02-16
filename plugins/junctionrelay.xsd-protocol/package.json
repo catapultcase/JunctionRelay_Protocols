@@ -1,7 +1,7 @@
 {
   "name": "@junctionrelay/plugin-xsd-protocol",
   "version": "1.0.0",
-  "description": "XSD dictionarySensors format for device communication",
+  "description": "JunctionRelay XSD dictionarySensors format for device communication",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +19,7 @@
     "payloadName": "junctionrelay.xsd-protocol",
     "entry": "dist/index.js",
     "displayName": "XSD Protocol",
-    "description": "XSD dictionarySensors format for device communication",
+    "description": "JunctionRelay XSD dictionarySensors format for device communication",
     "category": "Protocol",
     "emoji": "📡",
     "outputContentType": "application/json",
