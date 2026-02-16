@@ -24,7 +24,10 @@
     "emoji": "📡",
     "outputContentType": "application/json",
     "outputDescription": "XSD sensor payload with dictionarySensors/unmappedSensors structure",
-    "authorName": "JunctionRelay"
+    "authorName": "JunctionRelay",
+    "fields": {
+      "configurable": ["unmappedSensors"]
+    }
   },
   "scripts": {
     "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
