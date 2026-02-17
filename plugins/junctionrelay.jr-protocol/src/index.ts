@@ -24,10 +24,14 @@ function buildSettings(config: Record<string, unknown>): Record<string, unknown>
 
 /**
  * Parse fieldsToSend config into a set of field names.
- * Default: value + unit (matching Server's default "Value,Unit").
+ * Accepts an array (from checkboxGroup) or a comma-separated string (legacy).
+ * Default: ['value', 'unit'].
  */
 function parseFieldsToSend(config: Record<string, unknown>): string[] {
   const raw = config.fieldsToSend;
+  if (Array.isArray(raw) && raw.length > 0) {
+    return raw.map(f => String(f).toLowerCase());
+  }
   if (typeof raw === 'string' && raw.trim()) {
     return raw.split(',').map(f => f.trim().toLowerCase());
   }

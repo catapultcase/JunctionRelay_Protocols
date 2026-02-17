@@ -69,7 +69,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -98,7 +107,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -154,7 +172,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -216,7 +243,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -228,7 +264,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -248,7 +293,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -260,7 +314,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -272,7 +335,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]
@@ -284,7 +356,16 @@
             "fields": [
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
-              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
+              { "key": "fieldsToSend", "type": "checkboxGroup", "label": "Sensor Fields to Send", "default": ["value", "unit"], "options": [
+                { "value": "value", "label": "Value" },
+                { "value": "unit", "label": "Unit" },
+                { "value": "displayValue", "label": "Display Value" },
+                { "value": "pollerSource", "label": "Poller Source" },
+                { "value": "rawLabel", "label": "Raw Label" },
+                { "value": "category", "label": "Category" },
+                { "value": "sensorType", "label": "Sensor Type" },
+                { "value": "componentName", "label": "Component Name" }
+              ]}
             ]
           }
         ]

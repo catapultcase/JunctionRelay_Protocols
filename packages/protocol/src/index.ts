@@ -70,6 +70,28 @@ export interface SensorEntry {
   componentName?: string;
 }
 
+/**
+ * Catalog of all sensor fields available in SensorEntry.
+ * Plugins use this to define which fields appear in their output
+ * via the `fieldsToSend` config (checkboxGroup field type).
+ *
+ * Each entry has:
+ * - `key` — the camelCase field name on SensorEntry
+ * - `label` — human-readable display name
+ * - `description` — what the field contains
+ * - `default` — whether this field is included by default
+ */
+export const SENSOR_FIELDS = [
+  { key: 'value',         label: 'Value',          description: 'The sensor reading (numeric formatted to 2 decimals, or string)', default: true },
+  { key: 'unit',          label: 'Unit',           description: 'Unit of measurement (°C, %, MB, etc.)',                          default: true },
+  { key: 'displayValue',  label: 'Display Value',  description: 'Pre-formatted value for direct display',                         default: false },
+  { key: 'pollerSource',  label: 'Poller Source',  description: 'Which collector produced this reading (psutil, hwinfo, etc.)',    default: false },
+  { key: 'rawLabel',      label: 'Raw Label',      description: 'Original sensor label before tag normalization',                 default: false },
+  { key: 'category',      label: 'Category',       description: 'Sensor category (cpu, memory, gpu, disk, etc.)',                 default: false },
+  { key: 'sensorType',    label: 'Sensor Type',    description: 'Type classification (temperature, utilization, clock, etc.)',     default: false },
+  { key: 'componentName', label: 'Component Name', description: 'Hardware component name (CPU Package, GPU Core, etc.)',           default: false },
+] as const;
+
 /** Input to every handler in the handlers map */
 export interface HandlerParams {
   /** Flat sensor dictionary keyed by sensorTag */
@@ -145,7 +167,7 @@ export interface PayloadFieldOption {
 /** Single field definition within a profile config group */
 export interface PayloadFieldDefinition {
   key: string;
-  type: 'text' | 'number' | 'boolean' | 'color' | 'select' | 'slider' | 'json';
+  type: 'text' | 'number' | 'boolean' | 'color' | 'select' | 'slider' | 'json' | 'checkboxGroup';
   label: string;
   default?: unknown;
   min?: number;
