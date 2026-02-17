@@ -22,13 +22,6 @@
     "description": "Pass-through flat sensor dictionary as JSON",
     "category": "Data",
     "emoji": "📋",
-    "fields": {
-      "configurable": ["includeTimestamp", "includeMetadata"]
-    },
-    "defaults": {
-      "includeTimestamp": true,
-      "includeMetadata": false
-    },
     "messageTypes": {
       "readings": { "trigger": "periodic", "description": "Flat sensor dictionary" }
     },

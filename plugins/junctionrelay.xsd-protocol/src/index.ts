@@ -1,4 +1,4 @@
-import type { PayloadPluginConfig, HandlerParams, SensorEntry } from '@junctionrelay/payload-sdk';
+import type { PayloadPluginConfig, HandlerParams } from '@junctionrelay/payload-sdk';
 
 export default {
   metadata: {
@@ -10,14 +10,13 @@ export default {
     outputContentType: 'application/json',
     outputDescription: 'XSD sensor payload with dictionarySensors/unmappedSensors structure',
     authorName: 'JunctionRelay',
-    fields: { configurable: ['unmappedSensors'] },
     messageTypes: {
       sensor: { trigger: 'periodic', description: 'XSD dictionarySensors sensor stream' },
     },
   },
 
   handlers: {
-    sensor: async ({ sensors, config, context }: HandlerParams) => {
+    sensor: async ({ sensors, context }: HandlerParams) => {
       const dictionarySensors: Record<string, object> = {};
       for (const [tag, s] of Object.entries(sensors)) {
         dictionarySensors[tag] = {
@@ -29,37 +28,17 @@ export default {
         };
       }
 
-      const unmappedSensors: Record<string, object> = {};
-      const unmapped = config.unmappedSensors as Record<string, SensorEntry> | undefined;
-      if (unmapped) {
-        for (const [key, s] of Object.entries(unmapped)) {
-          unmappedSensors[key] = {
-            value: s.value,
-            unit: s.unit || '',
-            pollerSource: s.pollerSource || 'unknown',
-            rawLabel: s.rawLabel || key,
-          };
-        }
-      }
-
       return {
         payload: {
           type: 'xsd_sensor',
           screenId: context.screenId,
           dictionarySensors,
-          unmappedSensors,
+          unmappedSensors: {},
           sensorSource: context.sensorSource,
           timestamp: context.timestamp,
         },
         contentType: 'application/json',
       };
-    },
-
-    validate: async ({ config }: HandlerParams) => {
-      if (config.unmappedSensors !== undefined && (typeof config.unmappedSensors !== 'object' || config.unmappedSensors === null || Array.isArray(config.unmappedSensors))) {
-        return { valid: false, errors: ['unmappedSensors must be a Record<string, SensorEntry> if provided'] };
-      }
-      return { valid: true };
     },
 
     getOutputSchema: async () => ({
@@ -70,9 +49,7 @@ export default {
         dictionarySensors: {
           cpu_usage_total: { value: 45.2, unit: '%', displayValue: '45.2', pollerSource: 'psutil', rawLabel: 'usage_total' },
         },
-        unmappedSensors: {
-          gpu_temp: { value: 72, unit: '°C', pollerSource: 'nvidia-smi', rawLabel: 'GPU Temperature' },
-        },
+        unmappedSensors: {},
         sensorSource: 'local',
         timestamp: 1771257808745,
       },

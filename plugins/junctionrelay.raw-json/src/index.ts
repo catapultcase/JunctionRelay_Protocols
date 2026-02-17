@@ -7,8 +7,6 @@ export default {
     description: 'Pass-through flat sensor dictionary as JSON',
     category: 'Data',
     emoji: '📋',
-    fields: { configurable: ['includeTimestamp', 'includeMetadata'] },
-    defaults: { includeTimestamp: true, includeMetadata: false },
     messageTypes: {
       readings: { trigger: 'periodic', description: 'Flat sensor dictionary' },
     },
@@ -18,13 +16,8 @@ export default {
   },
 
   handlers: {
-    readings: async ({ sensors, config, context }: HandlerParams) => {
-      const result: Record<string, unknown> = {};
-      if (config.includeTimestamp) result.timestamp = context.timestamp;
-      if (config.includeMetadata) {
-        result.screenId = context.screenId;
-        result.sensorSource = context.sensorSource;
-      }
+    readings: async ({ sensors, context }: HandlerParams) => {
+      const result: Record<string, unknown> = { timestamp: context.timestamp };
       for (const [tag, sensor] of Object.entries(sensors)) {
         result[tag] = sensor.value;
       }
