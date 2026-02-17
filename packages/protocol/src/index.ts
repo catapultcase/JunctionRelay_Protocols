@@ -58,7 +58,7 @@ export interface JsonRpcError {
 // Payload-Specific Types
 // ============================================================================
 
-/** Sensor entry passed to transform() */
+/** Sensor entry in the flat dictionary passed to handlers */
 export interface SensorEntry {
   value: string | number | boolean;
   unit: string;
@@ -70,50 +70,73 @@ export interface SensorEntry {
   componentName?: string;
 }
 
-/** Input to transform() */
-export interface TransformParams {
+/** Input to every handler in the handlers map */
+export interface HandlerParams {
+  /** Flat sensor dictionary keyed by sensorTag */
   sensors: Record<string, SensorEntry>;
+  /** Plugin-specific configuration (from payload instance settings) */
   config: Record<string, unknown>;
+  /** Optional Profile name — selects a named preset within the Protocol */
   profile?: string;
+  /** Context provided by the host */
   context: {
     screenId: string;
     timestamp: number;
+    /** 'local' | 'remote' — where sensor data originated */
     sensorSource: string;
+    /** Whether this is a full sync vs incremental update */
     fullSync: boolean;
+    /** The handler name being invoked (matches the key in handlers map) */
+    messageType: string;
   };
 }
 
-/** Output from transform() */
+/** Output from message type handlers (connect, periodic, disconnect) */
 export interface TransformResult {
+  /** The transformed payload — any JSON-serializable value */
   payload: unknown;
+  /** MIME type of the output (e.g., 'application/json', 'text/plain') */
   contentType: string;
+  /** Optional metadata for the host (routing hints, topic names, etc.) */
   metadata?: Record<string, unknown>;
 }
 
-/** Output schema description */
+/** Output schema description (from getOutputSchema utility handler) */
 export interface OutputSchema {
   description: string;
   example: unknown;
   jsonSchema?: Record<string, unknown>;
 }
 
-/** Validation result */
+/** Validation result (from validate utility handler) */
 export interface ValidationResult {
   valid: boolean;
   errors?: string[];
 }
 
-/** Health check result */
+/** Health check result (built into SDK, not plugin-authored) */
 export interface HealthCheckResult {
   healthy: boolean;
   uptime: number;
 }
 
 // ============================================================================
+// Message Type Declaration
+// ============================================================================
+
+/** Declares when a handler should be called by the host */
+export interface MessageTypeDeclaration {
+  /** Lifecycle trigger: when the host calls this handler */
+  trigger: 'connect' | 'periodic' | 'disconnect' | 'on-change' | 'on-demand' | 'once';
+  /** Human-readable description of what this handler does */
+  description?: string;
+}
+
+// ============================================================================
 // Plugin Metadata — returned by getMetadata
 // ============================================================================
 
-/** Plugin metadata (from manifest) */
+/** Plugin metadata (from manifest + returned by getMetadata) */
 export interface PayloadMetadata {
   payloadName: string;
   displayName: string;
@@ -123,6 +146,8 @@ export interface PayloadMetadata {
   fields?: { configurable?: string[] };
   defaults?: Record<string, unknown>;
   profiles?: string[];
+  /** Handler map declaration — keys are handler names, values are trigger metadata */
+  messageTypes?: Record<string, MessageTypeDeclaration>;
   outputContentType?: string;
   outputDescription?: string;
   setupInstructions?: { title: string; body: string }[];
@@ -145,6 +170,8 @@ export interface PayloadPluginManifest {
   fields?: { configurable?: string[] };
   defaults?: Record<string, unknown>;
   profiles?: string[];
+  /** Handler map declaration — keys are handler names, values are trigger metadata */
+  messageTypes?: Record<string, MessageTypeDeclaration>;
   outputContentType?: string;
   outputDescription?: string;
   setupInstructions?: { title: string; body: string }[];
@@ -158,15 +185,3 @@ export interface DiscoveredPlugin {
   packageName: string;
   version: string;
 }
-
-// ============================================================================
-// Method name constants
-// ============================================================================
-
-export type PayloadMethod =
-  | 'getMetadata'
-  | 'transform'
-  | 'transformConfig'
-  | 'getOutputSchema'
-  | 'validate'
-  | 'healthCheck';

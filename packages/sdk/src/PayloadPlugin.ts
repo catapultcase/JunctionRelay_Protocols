@@ -1,23 +1,25 @@
 import * as readline from 'node:readline';
 import type {
   PayloadMetadata,
-  TransformParams,
-  TransformResult,
-  OutputSchema,
-  ValidationResult,
+  HandlerParams,
   HealthCheckResult,
   JsonRpcRequest,
   JsonRpcResponse,
 } from '@junctionrelay/payload-protocol';
 import { JSON_RPC_ERRORS, PLUGIN_ID_PATTERN } from '@junctionrelay/payload-protocol';
 
+/**
+ * Plugin config shape — what plugin authors export as `default`.
+ *
+ * - `metadata` — plugin identity, capabilities, and messageTypes declaration
+ * - `handlers` — named handler functions. Message type handlers are declared
+ *   in `metadata.messageTypes` with triggers (connect, periodic, disconnect).
+ *   Utility handlers (getOutputSchema, validate) are also in this map but
+ *   are NOT declared in messageTypes — hosts call them on-demand for UI.
+ */
 export interface PayloadPluginConfig {
   metadata: PayloadMetadata;
-
-  transform(params: TransformParams): Promise<TransformResult>;
-  transformConfig?(params: TransformParams & { layoutConfig?: Record<string, unknown> }): Promise<TransformResult>;
-  getOutputSchema?(profile?: string): Promise<OutputSchema>;
-  validate?(config: Record<string, unknown>): Promise<ValidationResult>;
+  handlers: Record<string, (params: HandlerParams) => Promise<unknown>>;
 }
 
 export class PayloadPlugin {
@@ -102,52 +104,28 @@ export class PayloadPlugin {
   }
 
   private async dispatch(method: string, params: Record<string, unknown>): Promise<unknown> {
-    switch (method) {
-      case 'getMetadata':
-        return this.config.metadata;
-
-      case 'transform': {
-        const transformParams = params as unknown as TransformParams;
-        return this.config.transform(transformParams);
-      }
-
-      case 'transformConfig': {
-        const configParams = params as unknown as TransformParams & { layoutConfig?: Record<string, unknown> };
-        if (this.config.transformConfig) {
-          return this.config.transformConfig(configParams);
-        }
-        throw Object.assign(new Error('transformConfig not implemented'), {
-          code: JSON_RPC_ERRORS.METHOD_NOT_FOUND,
-        });
-      }
-
-      case 'getOutputSchema': {
-        const profile = params.profile as string | undefined;
-        if (this.config.getOutputSchema) {
-          return this.config.getOutputSchema(profile);
-        }
-        return { description: 'No schema available', example: null };
-      }
-
-      case 'validate': {
-        const config = params.config as Record<string, unknown> | undefined;
-        if (this.config.validate) {
-          return this.config.validate(config ?? {});
-        }
-        return { valid: true };
-      }
-
-      case 'healthCheck':
-        return {
-          healthy: true,
-          uptime: Math.floor((Date.now() - this.startTime) / 1000),
-        } satisfies HealthCheckResult;
-
-      default:
-        throw Object.assign(new Error(`Method not found: ${method}`), {
-          code: JSON_RPC_ERRORS.METHOD_NOT_FOUND,
-        });
+    // Built-in methods handled by the SDK, not plugin authors
+    if (method === 'getMetadata') {
+      return this.config.metadata;
     }
+
+    if (method === 'healthCheck') {
+      return {
+        healthy: true,
+        uptime: Math.floor((Date.now() - this.startTime) / 1000),
+      } satisfies HealthCheckResult;
+    }
+
+    // All other methods dispatch to the plugin's handlers map
+    const handler = this.config.handlers[method];
+    if (!handler) {
+      throw Object.assign(new Error(`Method not found: ${method}`), {
+        code: JSON_RPC_ERRORS.METHOD_NOT_FOUND,
+      });
+    }
+
+    const handlerParams = params as unknown as HandlerParams;
+    return handler(handlerParams);
   }
 
   private writeResponse(response: JsonRpcResponse): void {

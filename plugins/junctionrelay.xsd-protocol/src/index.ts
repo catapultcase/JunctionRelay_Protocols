@@ -1,4 +1,4 @@
-import type { PayloadPluginConfig, TransformParams, SensorEntry, ValidationResult } from '@junctionrelay/payload-sdk';
+import type { PayloadPluginConfig, HandlerParams, SensorEntry } from '@junctionrelay/payload-sdk';
 
 export default {
   metadata: {
@@ -11,55 +11,58 @@ export default {
     outputDescription: 'XSD sensor payload with dictionarySensors/unmappedSensors structure',
     authorName: 'JunctionRelay',
     fields: { configurable: ['unmappedSensors'] },
+    messageTypes: {
+      sensor: { trigger: 'periodic', description: 'XSD dictionarySensors sensor stream' },
+    },
   },
 
-  async transform({ sensors, config, context }: TransformParams) {
-    const dictionarySensors: Record<string, object> = {};
-    for (const [tag, s] of Object.entries(sensors)) {
-      dictionarySensors[tag] = {
-        value: s.value,
-        unit: s.unit || '',
-        displayValue: s.displayValue ?? `${s.value}`,
-        pollerSource: s.pollerSource || 'unknown',
-        rawLabel: s.rawLabel || tag,
-      };
-    }
-
-    const unmappedSensors: Record<string, object> = {};
-    const unmapped = config.unmappedSensors as Record<string, SensorEntry> | undefined;
-    if (unmapped) {
-      for (const [key, s] of Object.entries(unmapped)) {
-        unmappedSensors[key] = {
+  handlers: {
+    sensor: async ({ sensors, config, context }: HandlerParams) => {
+      const dictionarySensors: Record<string, object> = {};
+      for (const [tag, s] of Object.entries(sensors)) {
+        dictionarySensors[tag] = {
           value: s.value,
           unit: s.unit || '',
+          displayValue: s.displayValue ?? `${s.value}`,
           pollerSource: s.pollerSource || 'unknown',
-          rawLabel: s.rawLabel || key,
+          rawLabel: s.rawLabel || tag,
         };
       }
-    }
 
-    return {
-      payload: {
-        type: 'xsd_sensor',
-        screenId: context.screenId,
-        dictionarySensors,
-        unmappedSensors,
-        sensorSource: context.sensorSource,
-        timestamp: context.timestamp,
-      },
-      contentType: 'application/json',
-    };
-  },
+      const unmappedSensors: Record<string, object> = {};
+      const unmapped = config.unmappedSensors as Record<string, SensorEntry> | undefined;
+      if (unmapped) {
+        for (const [key, s] of Object.entries(unmapped)) {
+          unmappedSensors[key] = {
+            value: s.value,
+            unit: s.unit || '',
+            pollerSource: s.pollerSource || 'unknown',
+            rawLabel: s.rawLabel || key,
+          };
+        }
+      }
 
-  async validate(config: Record<string, unknown>): Promise<ValidationResult> {
-    if (config.unmappedSensors !== undefined && (typeof config.unmappedSensors !== 'object' || config.unmappedSensors === null || Array.isArray(config.unmappedSensors))) {
-      return { valid: false, errors: ['unmappedSensors must be a Record<string, SensorEntry> if provided'] };
-    }
-    return { valid: true };
-  },
+      return {
+        payload: {
+          type: 'xsd_sensor',
+          screenId: context.screenId,
+          dictionarySensors,
+          unmappedSensors,
+          sensorSource: context.sensorSource,
+          timestamp: context.timestamp,
+        },
+        contentType: 'application/json',
+      };
+    },
 
-  async getOutputSchema() {
-    return {
+    validate: async ({ config }: HandlerParams) => {
+      if (config.unmappedSensors !== undefined && (typeof config.unmappedSensors !== 'object' || config.unmappedSensors === null || Array.isArray(config.unmappedSensors))) {
+        return { valid: false, errors: ['unmappedSensors must be a Record<string, SensorEntry> if provided'] };
+      }
+      return { valid: true };
+    },
+
+    getOutputSchema: async () => ({
       description: 'XSD sensor payload with dictionarySensors/unmappedSensors structure',
       example: {
         type: 'xsd_sensor',
@@ -73,6 +76,6 @@ export default {
         sensorSource: 'local',
         timestamp: 1771257808745,
       },
-    };
+    }),
   },
 } satisfies PayloadPluginConfig;

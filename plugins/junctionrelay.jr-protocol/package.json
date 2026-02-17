@@ -23,6 +23,11 @@
     "category": "Protocol",
     "emoji": "🔌",
     "profiles": ["lvgl-grid", "lvgl-radio", "lvgl-plotter", "quad", "matrix", "neopixel"],
+    "messageTypes": {
+      "config": { "trigger": "connect", "description": "Device initialization payload" },
+      "sensor": { "trigger": "periodic", "description": "Real-time sensor values" },
+      "stop": { "trigger": "disconnect", "description": "Stop signal to device" }
+    },
     "outputContentType": "application/json",
     "outputDescription": "JR sensor/config payload for LVGL, matrix, and NeoPixel devices",
     "authorName": "JunctionRelay"

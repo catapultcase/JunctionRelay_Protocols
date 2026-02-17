@@ -29,6 +29,9 @@
       "includeTimestamp": true,
       "includeMetadata": false
     },
+    "messageTypes": {
+      "readings": { "trigger": "periodic", "description": "Flat sensor dictionary" }
+    },
     "outputContentType": "application/json",
     "outputDescription": "Flat JSON object with sensor tags as keys",
     "authorName": "JunctionRelay"

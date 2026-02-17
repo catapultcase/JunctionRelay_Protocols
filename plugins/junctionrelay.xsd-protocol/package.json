@@ -27,6 +27,9 @@
     "authorName": "JunctionRelay",
     "fields": {
       "configurable": ["unmappedSensors"]
+    },
+    "messageTypes": {
+      "sensor": { "trigger": "periodic", "description": "XSD dictionarySensors sensor stream" }
     }
   },
   "scripts": {
