@@ -25,6 +25,7 @@
     "outputContentType": "application/json",
     "outputDescription": "XSD sensor payload with dictionarySensors/unmappedSensors structure",
     "authorName": "JunctionRelay",
+    "jrPrefix": false,
     "messageTypes": {
       "sensor": { "trigger": "periodic", "description": "XSD dictionarySensors sensor stream" }
     }

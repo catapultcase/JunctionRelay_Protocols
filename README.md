@@ -86,6 +86,7 @@ Update the `junctionrelay` manifest — this is how the host app discovers your 
 - `junctionrelay.fields.configurable` — config keys the user can set
 - `junctionrelay.defaults` — default values for configurable fields
 - `junctionrelay.profiles` — named profiles this protocol supports (e.g. `['lvgl-grid', 'matrix']`)
+- `junctionrelay.jrPrefix` — whether JR Prefix binary framing is enabled for new payloads (default: `true`)
 - `junctionrelay.setupInstructions` — steps shown to the user during setup
 - `junctionrelay.authorName` — display name shown in the management tab
 
@@ -123,6 +124,17 @@ export default {
 - The `PayloadPluginConfig` type is the full interface. Use `satisfies` for type checking without wrapping in a class.
 - `transform()` is the only required handler. All others are optional.
 - No `configure()` or session management — payloads are simpler than collectors.
+
+### Fields To Send
+
+Most protocol plugins should let users choose which sensor fields appear in the output. The SDK exports `SENSOR_FIELDS` — the canonical list of all fields available on a `SensorEntry` (value, unit, displayValue, pollerSource, rawLabel, category, sensorType, componentName) — with labels, descriptions, and defaults.
+
+To support this:
+1. Add a `fieldsToSend` `checkboxGroup` field to your profile's field groups in `package.json` (default: `["value", "unit"]`)
+2. Exclude `fieldsToSend` from your payload output (it's a host/UI concern)
+3. Read `config.fieldsToSend` in your sensor handler and filter each `SensorEntry` to only the selected fields
+
+See the [SDK README](packages/sdk/README.md#fields-to-send-sensor-field-filtering) for the full pattern with code examples.
 
 ### Handler methods
 
@@ -200,6 +212,14 @@ Host (Server or XSD)                Plugin (subprocess)
 - Plugins log to **stderr** (the host captures these as plugin logs)
 - The SDK handles all JSON-RPC parsing, dispatching, and error handling
 - Payload plugins are **stateless** — no session management, no `configure()` step
+
+### JR Prefix
+
+The host can optionally prepend an 8-byte binary framing header (`[payload_length:4][message_type:2][routing:2]`, little-endian) to each payload. This is configurable per payload via the "Include JR Prefix" toggle and is used for transports without built-in framing (raw serial, raw TCP). Plugins don't need to handle this — the host applies it transparently.
+
+Plugins declare the default via `"jrPrefix": true` or `"jrPrefix": false` in their `package.json` manifest. If omitted, defaults to enabled. The user can override per-payload in the UI.
+
+See the [SDK README](packages/sdk/README.md) for header format details.
 
 ## Quick Start (Testing)
 

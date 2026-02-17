@@ -2,8 +2,6 @@ import type { PayloadPluginConfig, HandlerParams } from '@junctionrelay/payload-
 
 // Keys that are host/UI concerns — excluded from the config settings output
 const HOST_KEYS = new Set([
-  'includePrefixConfig',
-  'includePrefixSensor',
   'fieldsToSend',
 ]);
 
@@ -43,38 +41,147 @@ function parseFieldsToSend(config: Record<string, unknown>): string[] {
  * Field names use camelCase in output (matching codebase convention).
  */
 function buildSensorData(
-  sensor: { value: string | number | boolean; unit: string; displayValue: string; pollerSource: string; rawLabel: string; category?: string; sensorType?: string; componentName?: string },
+  sensor: Record<string, unknown>,
   fields: string[],
 ): Record<string, unknown> {
   const entry: Record<string, unknown> = {};
   for (const field of fields) {
     switch (field) {
-      case 'value':
-        // Format numeric values as strings for consistency
-        entry.value = typeof sensor.value === 'number'
-          ? sensor.value.toFixed(2)
-          : String(sensor.value);
+      case 'value': {
+        // Format numeric values as strings for consistency (matches Server's F{DecimalPlaces})
+        const val = sensor.value;
+        const dp = typeof sensor.decimalPlaces === 'number' ? sensor.decimalPlaces : 2;
+        entry.value = typeof val === 'number' ? val.toFixed(dp) : String(val);
         break;
+      }
       case 'unit':
-        entry.unit = sensor.unit || '';
+        entry.unit = sensor.unit ?? '';
+        break;
+      case 'decimalplaces':
+        if (sensor.decimalPlaces != null) entry.decimalPlaces = sensor.decimalPlaces;
         break;
       case 'displayvalue':
-        entry.displayValue = sensor.displayValue ?? String(sensor.value);
+        if (sensor.displayValue != null) entry.displayValue = sensor.displayValue;
         break;
-      case 'category':
-        if (sensor.category) entry.category = sensor.category;
+
+      // Identity & metadata
+      case 'id':
+        if (sensor.id != null) entry.id = sensor.id;
+        break;
+      case 'originalid':
+        if (sensor.originalId != null) entry.originalId = sensor.originalId;
+        break;
+      case 'name':
+        if (sensor.name != null) entry.name = sensor.name;
+        break;
+      case 'externalid':
+        if (sensor.externalId != null) entry.externalId = sensor.externalId;
         break;
       case 'sensortype':
-        if (sensor.sensorType) entry.sensorType = sensor.sensorType;
+        if (sensor.sensorType != null) entry.sensorType = sensor.sensorType;
+        break;
+      case 'category':
+        if (sensor.category != null) entry.category = sensor.category;
         break;
       case 'componentname':
-        if (sensor.componentName) entry.componentName = sensor.componentName;
+        if (sensor.componentName != null) entry.componentName = sensor.componentName;
         break;
+      case 'devicename':
+        if (sensor.deviceName != null) entry.deviceName = sensor.deviceName;
+        break;
+      case 'formula':
+        if (sensor.formula != null) entry.formula = sensor.formula;
+        break;
+      case 'lastupdated':
+        if (sensor.lastUpdated != null) entry.lastUpdated = sensor.lastUpdated;
+        break;
+
+      // Relationship IDs
+      case 'junctionid':
+        if (sensor.junctionId != null) entry.junctionId = sensor.junctionId;
+        break;
+      case 'junctiondevicelinkid':
+        if (sensor.junctionDeviceLinkId != null) entry.junctionDeviceLinkId = sensor.junctionDeviceLinkId;
+        break;
+      case 'junctioncollectorlinkid':
+        if (sensor.junctionCollectorLinkId != null) entry.junctionCollectorLinkId = sensor.junctionCollectorLinkId;
+        break;
+      case 'deviceid':
+        if (sensor.deviceId != null) entry.deviceId = sensor.deviceId;
+        break;
+      case 'serviceid':
+        if (sensor.serviceId != null) entry.serviceId = sensor.serviceId;
+        break;
+      case 'collectorid':
+        if (sensor.collectorId != null) entry.collectorId = sensor.collectorId;
+        break;
+      case 'sensororder':
+        if (sensor.sensorOrder != null) entry.sensorOrder = sensor.sensorOrder;
+        break;
+
+      // MQTT
+      case 'mqttserviceid':
+        if (sensor.mqttServiceId != null) entry.mqttServiceId = sensor.mqttServiceId;
+        break;
+      case 'mqtttopic':
+        if (sensor.mqttTopic != null) entry.mqttTopic = sensor.mqttTopic;
+        break;
+      case 'mqttqos':
+        if (sensor.mqttQoS != null) entry.mqttQoS = sensor.mqttQoS;
+        break;
+
+      // Status flags
+      case 'ismissing':
+        if (sensor.isMissing != null) entry.isMissing = sensor.isMissing;
+        break;
+      case 'isstale':
+        if (sensor.isStale != null) entry.isStale = sensor.isStale;
+        break;
+      case 'isselected':
+        if (sensor.isSelected != null) entry.isSelected = sensor.isSelected;
+        break;
+      case 'isvisible':
+        if (sensor.isVisible != null) entry.isVisible = sensor.isVisible;
+        break;
+
+      // Custom attributes
+      case 'customattribute1':
+        if (sensor.customAttribute1 != null) entry.customAttribute1 = sensor.customAttribute1;
+        break;
+      case 'customattribute2':
+        if (sensor.customAttribute2 != null) entry.customAttribute2 = sensor.customAttribute2;
+        break;
+      case 'customattribute3':
+        if (sensor.customAttribute3 != null) entry.customAttribute3 = sensor.customAttribute3;
+        break;
+      case 'customattribute4':
+        if (sensor.customAttribute4 != null) entry.customAttribute4 = sensor.customAttribute4;
+        break;
+      case 'customattribute5':
+        if (sensor.customAttribute5 != null) entry.customAttribute5 = sensor.customAttribute5;
+        break;
+      case 'customattribute6':
+        if (sensor.customAttribute6 != null) entry.customAttribute6 = sensor.customAttribute6;
+        break;
+      case 'customattribute7':
+        if (sensor.customAttribute7 != null) entry.customAttribute7 = sensor.customAttribute7;
+        break;
+      case 'customattribute8':
+        if (sensor.customAttribute8 != null) entry.customAttribute8 = sensor.customAttribute8;
+        break;
+      case 'customattribute9':
+        if (sensor.customAttribute9 != null) entry.customAttribute9 = sensor.customAttribute9;
+        break;
+      case 'customattribute10':
+        if (sensor.customAttribute10 != null) entry.customAttribute10 = sensor.customAttribute10;
+        break;
+
+      // XSD-specific
       case 'pollersource':
-        entry.pollerSource = sensor.pollerSource || '';
+        if (sensor.pollerSource != null) entry.pollerSource = sensor.pollerSource;
         break;
       case 'rawlabel':
-        entry.rawLabel = sensor.rawLabel || '';
+        if (sensor.rawLabel != null) entry.rawLabel = sensor.rawLabel;
         break;
     }
   }
