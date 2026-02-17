@@ -71,14 +71,6 @@
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
             ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 4, "min": 1, "max": 24 }
-            ]
           }
         ]
       },
@@ -107,14 +99,6 @@
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
-            ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 4, "min": 1, "max": 24 }
             ]
           }
         ]
@@ -171,14 +155,6 @@
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
-            ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
             ]
           }
         ]
@@ -242,14 +218,6 @@
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
             ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
-            ]
           }
         ]
       },
@@ -261,14 +229,6 @@
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
-            ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 560, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 280, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
             ]
           }
         ]
@@ -290,14 +250,6 @@
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
             ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 4, "min": 1, "max": 24 }
-            ]
           }
         ]
       },
@@ -309,14 +261,6 @@
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
-            ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
             ]
           }
         ]
@@ -330,14 +274,6 @@
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
             ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 560, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 280, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
-            ]
           }
         ]
       },
@@ -349,14 +285,6 @@
               { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
               { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
               { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "value,unit", "description": "Comma-separated: value, unit, displayValue, category, sensorType, componentName, pollerSource, rawLabel" }
-            ]
-          },
-          {
-            "name": "Preview",
-            "fields": [
-              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 400, "min": 100, "max": 1920 },
-              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 300, "min": 100, "max": 1080 },
-              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
             ]
           }
         ]

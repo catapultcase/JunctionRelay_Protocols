@@ -5,9 +5,6 @@ const HOST_KEYS = new Set([
   'includePrefixConfig',
   'includePrefixSensor',
   'fieldsToSend',
-  'previewWidth',
-  'previewHeight',
-  'previewSensors',
 ]);
 
 /**
