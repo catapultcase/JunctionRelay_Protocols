@@ -7,7 +7,7 @@ export default {
     description: 'JunctionRelay Server protocol for device communication',
     category: 'Protocol',
     emoji: '🔌',
-    profiles: ['lvgl-grid', 'lvgl-radio', 'lvgl-plotter', 'quad', 'matrix', 'neopixel'],
+    profiles: ['lvgl-grid', 'lvgl-radio', 'lvgl-plotter', 'lvgl-astro', 'quad', 'matrix', 'neopixel', 'charlie', 'minimal'],
     messageTypes: {
       config: { trigger: 'connect', description: 'Device initialization payload' },
       sensor: { trigger: 'periodic', description: 'Real-time sensor values' },
@@ -16,6 +16,8 @@ export default {
     outputContentType: 'application/json',
     outputDescription: 'JR sensor/config payload for LVGL, matrix, and NeoPixel devices',
     authorName: 'JunctionRelay',
+    // profileConfigs are defined in package.json and read at discovery time by the host.
+    // They are not duplicated here — the host serves them via the /api/payloads/types endpoint.
   },
 
   handlers: {

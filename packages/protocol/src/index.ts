@@ -133,6 +133,41 @@ export interface MessageTypeDeclaration {
 }
 
 // ============================================================================
+// Profile Configuration Field Definitions
+// ============================================================================
+
+/** Option for select-type fields */
+export interface PayloadFieldOption {
+  value: string;
+  label: string;
+}
+
+/** Single field definition within a profile config group */
+export interface PayloadFieldDefinition {
+  key: string;
+  type: 'text' | 'number' | 'boolean' | 'color' | 'select' | 'slider' | 'json';
+  label: string;
+  default?: unknown;
+  min?: number;
+  max?: number;
+  step?: number;
+  options?: PayloadFieldOption[];
+  description?: string;
+}
+
+/** Group of related fields (renders as one accordion section) */
+export interface PayloadFieldGroup {
+  name: string;
+  description?: string;
+  fields: PayloadFieldDefinition[];
+}
+
+/** Per-profile configuration schema */
+export interface PayloadProfileConfig {
+  fieldGroups: PayloadFieldGroup[];
+}
+
+// ============================================================================
 // Plugin Metadata — returned by getMetadata
 // ============================================================================
 
@@ -152,6 +187,8 @@ export interface PayloadMetadata {
   outputDescription?: string;
   setupInstructions?: { title: string; body: string }[];
   authorName?: string;
+  /** Per-profile field group definitions for configuration UI */
+  profileConfigs?: Record<string, PayloadProfileConfig>;
 }
 
 // ============================================================================
@@ -176,6 +213,8 @@ export interface PayloadPluginManifest {
   outputDescription?: string;
   setupInstructions?: { title: string; body: string }[];
   authorName?: string;
+  /** Per-profile field group definitions for configuration UI */
+  profileConfigs?: Record<string, PayloadProfileConfig>;
 }
 
 /** Discovered plugin (from host scanning) */

@@ -22,7 +22,7 @@
     "description": "JunctionRelay Server protocol for device communication",
     "category": "Protocol",
     "emoji": "🔌",
-    "profiles": ["lvgl-grid", "lvgl-radio", "lvgl-plotter", "quad", "matrix", "neopixel"],
+    "profiles": ["lvgl-grid", "lvgl-radio", "lvgl-plotter", "lvgl-astro", "quad", "matrix", "neopixel", "charlie", "minimal"],
     "messageTypes": {
       "config": { "trigger": "connect", "description": "Device initialization payload" },
       "sensor": { "trigger": "periodic", "description": "Real-time sensor values" },
@@ -30,7 +30,338 @@
     },
     "outputContentType": "application/json",
     "outputDescription": "JR sensor/config payload for LVGL, matrix, and NeoPixel devices",
-    "authorName": "JunctionRelay"
+    "authorName": "JunctionRelay",
+    "profileConfigs": {
+      "lvgl-grid": {
+        "fieldGroups": [
+          {
+            "name": "Layout",
+            "fields": [
+              { "key": "rows", "type": "number", "label": "Rows", "default": 2, "min": 1, "max": 10 },
+              { "key": "columns", "type": "number", "label": "Columns", "default": 2, "min": 1, "max": 10 }
+            ]
+          },
+          {
+            "name": "Spacing",
+            "fields": [
+              { "key": "topMargin", "type": "number", "label": "Top Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "bottomMargin", "type": "number", "label": "Bottom Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "leftMargin", "type": "number", "label": "Left Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "rightMargin", "type": "number", "label": "Right Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "outerPadding", "type": "number", "label": "Outer Padding", "default": 10, "min": 0, "max": 100 },
+              { "key": "innerPadding", "type": "number", "label": "Inner Padding", "default": 20, "min": 0, "max": 100 }
+            ]
+          },
+          {
+            "name": "Appearance",
+            "fields": [
+              { "key": "textColor", "type": "color", "label": "Text Color", "default": "#FFFF00" },
+              { "key": "backgroundColor", "type": "color", "label": "Background Color", "default": "#000000" },
+              { "key": "borderColor", "type": "color", "label": "Border Color", "default": "#FF0000" },
+              { "key": "borderVisible", "type": "boolean", "label": "Show Border", "default": true },
+              { "key": "borderThickness", "type": "number", "label": "Border Thickness", "default": 2, "min": 1, "max": 10 },
+              { "key": "roundedCorners", "type": "boolean", "label": "Rounded Corners", "default": true },
+              { "key": "borderRadiusSize", "type": "number", "label": "Border Radius", "default": 15, "min": 0, "max": 50 }
+            ]
+          },
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 4, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "lvgl-radio": {
+        "fieldGroups": [
+          {
+            "name": "Spacing",
+            "fields": [
+              { "key": "topMargin", "type": "number", "label": "Top Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "bottomMargin", "type": "number", "label": "Bottom Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "leftMargin", "type": "number", "label": "Left Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "rightMargin", "type": "number", "label": "Right Margin", "default": 10, "min": 0, "max": 100 }
+            ]
+          },
+          {
+            "name": "Appearance",
+            "fields": [
+              { "key": "textColor", "type": "color", "label": "Text Color", "default": "#FFFF00" },
+              { "key": "backgroundColor", "type": "color", "label": "Background Color", "default": "#000000" },
+              { "key": "showUnits", "type": "boolean", "label": "Show Units", "default": true }
+            ]
+          },
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 4, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "lvgl-plotter": {
+        "fieldGroups": [
+          {
+            "name": "Layout",
+            "fields": [
+              { "key": "rows", "type": "number", "label": "Rows", "default": 1, "min": 1, "max": 10 },
+              { "key": "columns", "type": "number", "label": "Columns", "default": 1, "min": 1, "max": 10 }
+            ]
+          },
+          {
+            "name": "Spacing",
+            "fields": [
+              { "key": "topMargin", "type": "number", "label": "Top Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "bottomMargin", "type": "number", "label": "Bottom Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "leftMargin", "type": "number", "label": "Left Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "rightMargin", "type": "number", "label": "Right Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "outerPadding", "type": "number", "label": "Outer Padding", "default": 5, "min": 0, "max": 100 },
+              { "key": "innerPadding", "type": "number", "label": "Inner Padding", "default": 5, "min": 0, "max": 100 }
+            ]
+          },
+          {
+            "name": "Appearance",
+            "fields": [
+              { "key": "textColor", "type": "color", "label": "Text Color", "default": "#FFFF00" },
+              { "key": "backgroundColor", "type": "color", "label": "Background Color", "default": "#000000" },
+              { "key": "borderColor", "type": "color", "label": "Border Color", "default": "#FF0000" },
+              { "key": "borderVisible", "type": "boolean", "label": "Show Border", "default": true },
+              { "key": "borderThickness", "type": "number", "label": "Border Thickness", "default": 2, "min": 1, "max": 10 },
+              { "key": "roundedCorners", "type": "boolean", "label": "Rounded Corners", "default": true },
+              { "key": "borderRadiusSize", "type": "number", "label": "Border Radius", "default": 20, "min": 0, "max": 50 }
+            ]
+          },
+          {
+            "name": "Charts",
+            "fields": [
+              { "key": "chartScrollSpeed", "type": "number", "label": "Scroll Speed (ms)", "default": 100, "min": 10, "max": 1000, "step": 10 },
+              { "key": "chartOutlineVisible", "type": "boolean", "label": "Chart Outline", "default": true },
+              { "key": "showLegend", "type": "boolean", "label": "Show Legend", "default": true },
+              { "key": "positionLegendInside", "type": "boolean", "label": "Legend Inside Chart", "default": true },
+              { "key": "showXAxisLabels", "type": "boolean", "label": "Show X-Axis Labels", "default": false },
+              { "key": "showYAxisLabels", "type": "boolean", "label": "Show Y-Axis Labels", "default": false },
+              { "key": "gridDensity", "type": "number", "label": "Grid Density", "default": 10, "min": 1, "max": 50 },
+              { "key": "historyPointsToShow", "type": "number", "label": "History Points", "default": 100, "min": 10, "max": 1000, "step": 10 },
+              { "key": "showUnits", "type": "boolean", "label": "Show Units", "default": false }
+            ]
+          },
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "lvgl-astro": {
+        "fieldGroups": [
+          {
+            "name": "Spacing",
+            "fields": [
+              { "key": "topMargin", "type": "number", "label": "Top Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "bottomMargin", "type": "number", "label": "Bottom Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "leftMargin", "type": "number", "label": "Left Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "rightMargin", "type": "number", "label": "Right Margin", "default": 10, "min": 0, "max": 100 },
+              { "key": "outerPadding", "type": "number", "label": "Outer Padding", "default": 10, "min": 0, "max": 100 },
+              { "key": "innerPadding", "type": "number", "label": "Inner Padding", "default": 10, "min": 0, "max": 100 }
+            ]
+          },
+          {
+            "name": "Appearance",
+            "fields": [
+              { "key": "textColor", "type": "color", "label": "Text Color", "default": "#FFCB6B" },
+              { "key": "backgroundColor", "type": "color", "label": "Background Color", "default": "#001C1C" },
+              { "key": "borderColor", "type": "color", "label": "Border Color", "default": "#FFCB6B" },
+              { "key": "borderVisible", "type": "boolean", "label": "Show Border", "default": true },
+              { "key": "borderThickness", "type": "number", "label": "Border Thickness", "default": 2, "min": 1, "max": 10 },
+              { "key": "roundedCorners", "type": "boolean", "label": "Rounded Corners", "default": false },
+              { "key": "borderRadiusSize", "type": "number", "label": "Border Radius", "default": 0, "min": 0, "max": 50 },
+              { "key": "showUnits", "type": "boolean", "label": "Show Units", "default": true }
+            ]
+          },
+          {
+            "name": "Charts",
+            "fields": [
+              { "key": "gridDensity", "type": "number", "label": "Grid Density", "default": 12, "min": 1, "max": 50 },
+              { "key": "chartOutlineVisible", "type": "boolean", "label": "Chart Outline", "default": true },
+              { "key": "showLegend", "type": "boolean", "label": "Show Legend", "default": true },
+              { "key": "showXAxisLabels", "type": "boolean", "label": "Show X-Axis Labels", "default": true },
+              { "key": "showYAxisLabels", "type": "boolean", "label": "Show Y-Axis Labels", "default": true },
+              { "key": "historyPointsToShow", "type": "number", "label": "History Points", "default": 100, "min": 10, "max": 1000, "step": 10 }
+            ]
+          },
+          {
+            "name": "Terminal",
+            "description": "Astro terminal animation settings",
+            "fields": [
+              { "key": "terminal_color", "type": "color", "label": "Terminal Color", "default": "#00FF00" },
+              { "key": "console_opacity", "type": "number", "label": "Console Opacity", "default": 60, "min": 0, "max": 100 },
+              { "key": "terminal_opacity", "type": "number", "label": "Terminal Opacity", "default": 80, "min": 0, "max": 100 },
+              { "key": "animation_rate_ms", "type": "number", "label": "Animation Rate (ms)", "default": 100, "min": 10, "max": 1000, "step": 10 },
+              { "key": "star_count", "type": "number", "label": "Star Count", "default": 100, "min": 1, "max": 500 },
+              { "key": "star_brightness_min", "type": "number", "label": "Star Brightness Min", "default": 0, "min": 0, "max": 255 },
+              { "key": "star_brightness_max", "type": "number", "label": "Star Brightness Max", "default": 255, "min": 0, "max": 255 },
+              { "key": "star_twinkle_speed_min", "type": "number", "label": "Twinkle Speed Min", "default": 3, "min": 1, "max": 50 },
+              { "key": "star_twinkle_speed_max", "type": "number", "label": "Twinkle Speed Max", "default": 12, "min": 1, "max": 50 }
+            ]
+          },
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "quad": {
+        "fieldGroups": [
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 560, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 280, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "matrix": {
+        "fieldGroups": [
+          {
+            "name": "Appearance",
+            "fields": [
+              { "key": "textColor", "type": "color", "label": "Text Color", "default": "#FFFFFF" },
+              { "key": "backgroundColor", "type": "color", "label": "Background Color", "default": "#000000" },
+              { "key": "showUnits", "type": "boolean", "label": "Show Units", "default": true }
+            ]
+          },
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 4, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "neopixel": {
+        "fieldGroups": [
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 800, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 480, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "charlie": {
+        "fieldGroups": [
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 560, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 280, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      },
+      "minimal": {
+        "fieldGroups": [
+          {
+            "name": "Protocol",
+            "fields": [
+              { "key": "includePrefixConfig", "type": "boolean", "label": "Include Config Prefix", "default": true },
+              { "key": "includePrefixSensor", "type": "boolean", "label": "Include Sensor Prefix", "default": true },
+              { "key": "fieldsToSend", "type": "text", "label": "Fields to Send", "default": "Value,Unit" }
+            ]
+          },
+          {
+            "name": "Preview",
+            "fields": [
+              { "key": "previewWidth", "type": "number", "label": "Preview Width", "default": 400, "min": 100, "max": 1920 },
+              { "key": "previewHeight", "type": "number", "label": "Preview Height", "default": 300, "min": 100, "max": 1080 },
+              { "key": "previewSensors", "type": "number", "label": "Preview Sensors", "default": 1, "min": 1, "max": 24 }
+            ]
+          }
+        ]
+      }
+    }
   },
   "scripts": {
     "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
