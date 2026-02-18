@@ -9,9 +9,14 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "dist",
-    "rootDir": "src"
+    "sourceMap": true
   },
-  "exclude": ["node_modules", "dist"]
+  "include": [],
+  "references": [
+    { "path": "packages/protocol" },
+    { "path": "packages/sdk" },
+    { "path": "plugins/junctionrelay.jr-protocol" },
+    { "path": "plugins/junctionrelay.raw-json" },
+    { "path": "plugins/junctionrelay.xsd-protocol" }
+  ]
 }

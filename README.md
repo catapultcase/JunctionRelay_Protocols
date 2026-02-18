@@ -58,6 +58,9 @@ Update the `junctionrelay` manifest — this is how the host app discovers your 
     "description": "What this payload format does",
     "category": "Custom",
     "emoji": "📦",
+    "messageTypes": {
+      "readings": { "trigger": "periodic", "description": "Flat sensor dictionary" }
+    },
     "outputContentType": "application/json",
     "outputDescription": "Description of the output format",
     "authorName": "Your Name"
@@ -83,6 +86,7 @@ Update the `junctionrelay` manifest — this is how the host app discovers your 
 - `junctionrelay.outputDescription` — human-readable format description
 
 **Optional fields:**
+- `junctionrelay.messageTypes` — declares handler names and their triggers (e.g. `{ "sensor": { "trigger": "periodic" } }`)
 - `junctionrelay.fields.configurable` — config keys the user can set
 - `junctionrelay.defaults` — default values for configurable fields
 - `junctionrelay.profiles` — named profiles this protocol supports (e.g. `['lvgl-grid', 'matrix']`)
@@ -92,10 +96,10 @@ Update the `junctionrelay` manifest — this is how the host app discovers your 
 
 ### 3. Write your plugin
 
-A plugin exports a default config object with metadata and handler functions:
+A plugin exports a default config object with `metadata` and a `handlers` map:
 
 ```typescript
-import type { PayloadPluginConfig, TransformParams } from '@junctionrelay/payload-sdk';
+import type { PayloadPluginConfig, HandlerParams } from '@junctionrelay/payload-sdk';
 
 export default {
   metadata: {
@@ -104,30 +108,42 @@ export default {
     description: 'What this payload format does',
     category: 'Custom',
     emoji: '📦',
+    messageTypes: {
+      readings: { trigger: 'periodic', description: 'Flat sensor dictionary' },
+    },
     outputContentType: 'application/json',
     outputDescription: 'Description of the output',
     authorName: 'Your Name',
   },
 
-  async transform({ sensors, config, context }: TransformParams) {
-    const result: Record<string, unknown> = {};
-    for (const [tag, sensor] of Object.entries(sensors)) {
-      result[tag] = sensor.value;
-    }
-    return { payload: result, contentType: 'application/json' };
+  handlers: {
+    readings: async ({ sensors, context }: HandlerParams) => {
+      const result: Record<string, unknown> = { timestamp: context.timestamp };
+      for (const [tag, sensor] of Object.entries(sensors)) {
+        result[tag] = sensor.value;
+      }
+      return { payload: result, contentType: 'application/json' };
+    },
+
+    getOutputSchema: async () => ({
+      description: 'Flat JSON object with sensor tags as keys and raw values',
+      example: { timestamp: 1771257808745, cpu_usage_total: 45.2, gpu_temp: 72 },
+    }),
   },
 } satisfies PayloadPluginConfig;
 ```
 
 **Key points:**
-- Plugins are **stateless** — every `transform()` call receives all needed context (sensors, config, profile, context).
+- Plugins are **stateless** — every handler call receives all needed context (sensors, config, profile, context).
 - The `PayloadPluginConfig` type is the full interface. Use `satisfies` for type checking without wrapping in a class.
-- `transform()` is the only required handler. All others are optional.
+- `handlers` is a map of named functions. Handler names for message types must match the keys in `metadata.messageTypes`.
+- `messageTypes` declares when each handler is called (`connect`, `periodic`, `disconnect`, etc.).
+- Utility handlers like `getOutputSchema` go in `handlers` too but are NOT declared in `messageTypes` — hosts call them on-demand for UI.
 - No `configure()` or session management — payloads are simpler than collectors.
 
 ### Fields To Send
 
-Most protocol plugins should let users choose which sensor fields appear in the output. The SDK exports `SENSOR_FIELDS` — the canonical list of all fields available on a `SensorEntry` (value, unit, displayValue, pollerSource, rawLabel, category, sensorType, componentName) — with labels, descriptions, and defaults.
+Most protocol plugins should let users choose which sensor fields appear in the output. The SDK exports `SENSOR_FIELDS` — the canonical list of all 41 fields available on a `SensorEntry` — with labels, descriptions, and defaults.
 
 To support this:
 1. Add a `fieldsToSend` `checkboxGroup` field to your profile's field groups in `package.json` (default: `["value", "unit"]`)
@@ -136,14 +152,29 @@ To support this:
 
 See the [SDK README](packages/sdk/README.md#fields-to-send-sensor-field-filtering) for the full pattern with code examples.
 
-### Handler methods
+### Handler types
 
-| Method | Signature | Called When |
-|--------|-----------|------------|
-| `transform` | `(params: TransformParams) => Promise<TransformResult>` | Host needs to transform sensor data into the output format |
-| `transformConfig` | `(params: TransformParams & { layoutConfig? }) => Promise<TransformResult>` | Host needs to transform config/layout data |
-| `getOutputSchema` | `(profile?: string) => Promise<OutputSchema>` | Host requests the output format description |
-| `validate` | `(config: Record<string, unknown>) => Promise<ValidationResult>` | Host validates user-provided config |
+Handlers fall into two categories:
+
+**Message type handlers** — declared in `metadata.messageTypes` with a trigger that tells the host when to call them:
+
+| Trigger | Called When |
+|---------|------------|
+| `connect` | Junction connects (one-time setup payload) |
+| `periodic` | On each send interval (the main data handler) |
+| `disconnect` | Junction disconnects (cleanup payload) |
+| `on-change` | When sensor data changes |
+| `on-demand` | When the user triggers a manual send |
+| `once` | Once at startup |
+
+Handler names are **plugin-defined** — use names that describe the output (e.g. `sensor`, `config`, `readings`). All receive `HandlerParams` and return `TransformResult`.
+
+**Utility handlers** — NOT declared in `messageTypes`, called on-demand by the host for UI:
+
+| Handler | Signature | Purpose |
+|---------|-----------|---------|
+| `getOutputSchema` | `(params: HandlerParams) => Promise<OutputSchema>` | Returns output format description and example |
+| `validate` | `(params: HandlerParams) => Promise<ValidationResult>` | Validates user-provided config |
 
 ### 4. Build
 
@@ -196,13 +227,13 @@ The app automatically extracts the zip on next startup and deletes the zip file.
 Host reads package.json → extracts metadata from "junctionrelay" section → registers type
 ```
 
-**Runtime** (when a junction needs a payload transform):
+**Runtime** (when a junction needs a payload):
 ```
 Host (Server or XSD)                Plugin (subprocess)
   │                                     │
   ├── Spawns: node rpc-host.mjs dist/index.js
   │                                     ├── Prints "[plugin] ready" to stderr
-  ├── stdin: transform ────────────────►│
+  ├── stdin: {"method":"sensor",...} ──►│
   │◄──────────────── stdout: {payload} ─┤
   │        ... (repeats per send) ...   │
 ```
@@ -211,7 +242,7 @@ Host (Server or XSD)                Plugin (subprocess)
 - Communication is **JSON-RPC 2.0** over stdin/stdout (one JSON object per line)
 - Plugins log to **stderr** (the host captures these as plugin logs)
 - The SDK handles all JSON-RPC parsing, dispatching, and error handling
-- Payload plugins are **stateless** — no session management, no `configure()` step
+- Payload plugins are **stateless** — every handler call receives all needed context, no session management, no `configure()` step
 
 ### JR Prefix
 

@@ -1,4 +1,4 @@
-import type { PayloadPluginConfig, HandlerParams } from '@junctionrelay/payload-sdk';
+import type { PayloadPluginConfig, HandlerParams, SensorEntry } from '@junctionrelay/payload-sdk';
 
 // Keys that are host/UI concerns — excluded from the config settings output
 const HOST_KEYS = new Set([
@@ -41,7 +41,7 @@ function parseFieldsToSend(config: Record<string, unknown>): string[] {
  * Field names use camelCase in output (matching codebase convention).
  */
 function buildSensorData(
-  sensor: Record<string, unknown>,
+  sensor: SensorEntry,
   fields: string[],
 ): Record<string, unknown> {
   const entry: Record<string, unknown> = {};

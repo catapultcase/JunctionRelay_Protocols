@@ -1,6 +1,6 @@
 # @junctionrelay/payload-sdk
 
-SDK for building JunctionRelay payload plugins. Handles all JSON-RPC communication — you just write the transform logic.
+SDK for building JunctionRelay payload plugins. Handles all JSON-RPC communication — you just write the handler logic.
 
 ## Install
 
@@ -11,7 +11,7 @@ npm install @junctionrelay/payload-sdk
 ## Usage
 
 ```typescript
-import type { PayloadPluginConfig, TransformParams } from '@junctionrelay/payload-sdk';
+import type { PayloadPluginConfig, HandlerParams } from '@junctionrelay/payload-sdk';
 
 export default {
   metadata: {
@@ -20,17 +20,27 @@ export default {
     description: 'What this format does',
     category: 'Custom',
     emoji: '📦',
+    messageTypes: {
+      readings: { trigger: 'periodic', description: 'Flat sensor dictionary' },
+    },
     outputContentType: 'application/json',
     outputDescription: 'Description of the output',
     authorName: 'Your Name',
   },
 
-  async transform({ sensors, config, context }: TransformParams) {
-    const result: Record<string, unknown> = {};
-    for (const [tag, sensor] of Object.entries(sensors)) {
-      result[tag] = sensor.value;
-    }
-    return { payload: result, contentType: 'application/json' };
+  handlers: {
+    readings: async ({ sensors, context }: HandlerParams) => {
+      const result: Record<string, unknown> = { timestamp: context.timestamp };
+      for (const [tag, sensor] of Object.entries(sensors)) {
+        result[tag] = sensor.value;
+      }
+      return { payload: result, contentType: 'application/json' };
+    },
+
+    getOutputSchema: async () => ({
+      description: 'Flat JSON object with sensor tags as keys and raw values',
+      example: { timestamp: 1771257808745, cpu_usage_total: 45.2, gpu_temp: 72 },
+    }),
   },
 } satisfies PayloadPluginConfig;
 ```
@@ -38,7 +48,7 @@ export default {
 ## What the SDK Handles
 
 - stdin/stdout JSON-RPC 2.0 framing
-- Method routing (`getMetadata`, `transform`, `transformConfig`, `getOutputSchema`, `validate`, `healthCheck`)
+- Method routing (`getMetadata`, `healthCheck`, and all plugin-defined handlers)
 - Health check responses
 - Error serialization
 - Graceful shutdown on SIGTERM
@@ -54,7 +64,7 @@ import { PayloadPlugin } from '@junctionrelay/payload-sdk';
 import { buildSensorArray, formatValue, filterSensorsByTags } from '@junctionrelay/payload-sdk';
 
 // Types (re-exported from @junctionrelay/payload-protocol)
-import type { TransformParams, TransformResult, PayloadMetadata } from '@junctionrelay/payload-sdk';
+import type { HandlerParams, TransformResult, PayloadMetadata } from '@junctionrelay/payload-sdk';
 ```
 
 ## Fields To Send (Sensor Field Filtering)
@@ -257,7 +267,7 @@ for (const [tag, sensor] of Object.entries(sensors)) {
 }
 ```
 
-The default (`["value", "unit"]`) matches `SENSOR_FIELDS` entries where `default: true`. This ensures new payloads produce sensible output before the user customizes anything. The full `SENSOR_FIELDS` constant (40 fields) is the canonical reference — import it to generate `package.json` options or to validate user selections at runtime.
+The default (`["value", "unit"]`) matches `SENSOR_FIELDS` entries where `default: true`. This ensures new payloads produce sensible output before the user customizes anything. The full `SENSOR_FIELDS` constant (41 fields) is the canonical reference — import it to generate `package.json` options or to validate user selections at runtime.
 
 ## JR Prefix (Transport Framing)
 
@@ -299,7 +309,7 @@ The user can always override this per-payload via the JR Prefix toggle in the Co
 
 ## Key Difference from Collectors
 
-Payload plugins are **stateless** — every `transform()` call receives all needed context. There is no `configure()` step, no session management, and no persistent state. This makes the plugin protocol simpler than collectors.
+Payload plugins are **stateless** — every handler call receives all needed context. There is no `configure()` step, no session management, and no persistent state. This makes the plugin protocol simpler than collectors.
 
 ## Dependencies & Bundling
 
