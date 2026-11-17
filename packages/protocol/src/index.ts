@@ -303,6 +303,8 @@ export interface PayloadMetadata {
   messageTypes?: Record<string, MessageTypeDeclaration>;
   outputContentType?: string;
   outputDescription?: string;
+  /** Whether new payloads get the 8-byte JR Prefix framing header. Defaults to true when omitted. */
+  jrPrefix?: boolean;
   setupInstructions?: { title: string; body: string }[];
   authorName?: string;
   /** Per-profile field group definitions for configuration UI */
@@ -329,6 +331,8 @@ export interface PayloadPluginManifest {
   messageTypes?: Record<string, MessageTypeDeclaration>;
   outputContentType?: string;
   outputDescription?: string;
+  /** Whether new payloads get the 8-byte JR Prefix framing header. Defaults to true when omitted. */
+  jrPrefix?: boolean;
   setupInstructions?: { title: string; body: string }[];
   authorName?: string;
   /** Per-profile field group definitions for configuration UI */
