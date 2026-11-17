@@ -143,7 +143,7 @@ export default {
 
 ### Fields To Send
 
-Most protocol plugins should let users choose which sensor fields appear in the output. The SDK exports `SENSOR_FIELDS` — the canonical list of all 41 fields available on a `SensorEntry` — with labels, descriptions, and defaults.
+Most protocol plugins should let users choose which sensor fields appear in the output. The SDK exports `SENSOR_FIELDS` — the canonical list of all 40 fields available on a `SensorEntry` — with labels, descriptions, and defaults.
 
 To support this:
 1. Add a `fieldsToSend` `checkboxGroup` field to your profile's field groups in `package.json` (default: `["value", "unit"]`)
@@ -231,7 +231,7 @@ Host reads package.json → extracts metadata from "junctionrelay" section → r
 ```
 Host (Server or XSD)                Plugin (subprocess)
   │                                     │
-  ├── Spawns: node rpc-host.mjs dist/index.js
+  ├── Spawns: node rpc-host-protocols.mjs dist/index.js (host asset)
   │                                     ├── Prints "[plugin] ready" to stderr
   ├── stdin: {"method":"sensor",...} ──►│
   │◄──────────────── stdout: {payload} ─┤
@@ -259,9 +259,20 @@ See the [SDK README](packages/sdk/README.md) for header format details.
 npm install
 npm run build
 
-# Test a plugin manually via JSON-RPC
-echo '{"jsonrpc":"2.0","method":"getMetadata","params":{},"id":1}' | node packages/sdk/bin/rpc-host.mjs plugins/junctionrelay.raw-json/dist/index.js
+# Exercise a plugin handler directly (no host needed)
+node --input-type=module -e "
+const { default: plugin } = await import('./plugins/junctionrelay.raw-json/dist/index.js');
+console.log(plugin.metadata.payloadName);
+const result = await plugin.handlers.readings({
+  sensors: { cpu_usage: { value: 42, unit: '%' } },
+  config: {},
+  context: { screenId: 'test', timestamp: Date.now(), sensorSource: 'local', fullSync: true, messageType: 'readings' },
+});
+console.log(JSON.stringify(result, null, 2));
+"
 ```
+
+The JSON-RPC loader the host spawns is `rpc-host-protocols.mjs`, which lives in the JunctionRelay_Server repo (`JunctionRelay_Server/Resources`), not in this repo.
 
 ## License
 

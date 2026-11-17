@@ -39,7 +39,8 @@ export class PayloadPlugin {
 
   /**
    * Start the JSON-RPC stdin/stdout listener.
-   * Called by rpc-host.mjs for Server's child-process mode.
+   * Called by the host's rpc-host-protocols.mjs loader for Server's child-process mode
+   * (host asset in the JunctionRelay_Server repo, not in this repo).
    * NOT called automatically — plugins are pure config exports.
    */
   startRpc(): void {

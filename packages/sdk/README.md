@@ -57,7 +57,7 @@ export default {
 ## Exports
 
 ```typescript
-// Base class (used by rpc-host.mjs, not by plugin authors directly)
+// Base class (used by the host's rpc-host-protocols.mjs loader, a host asset that is not in this repo — not by plugin authors directly)
 import { PayloadPlugin } from '@junctionrelay/payload-sdk';
 
 // Helpers
@@ -267,7 +267,7 @@ for (const [tag, sensor] of Object.entries(sensors)) {
 }
 ```
 
-The default (`["value", "unit"]`) matches `SENSOR_FIELDS` entries where `default: true`. This ensures new payloads produce sensible output before the user customizes anything. The full `SENSOR_FIELDS` constant (41 fields) is the canonical reference — import it to generate `package.json` options or to validate user selections at runtime.
+The default (`["value", "unit"]`) matches `SENSOR_FIELDS` entries where `default: true`. This ensures new payloads produce sensible output before the user customizes anything. The full `SENSOR_FIELDS` constant (40 fields) is the canonical reference — import it to generate `package.json` options or to validate user selections at runtime.
 
 ## JR Prefix (Transport Framing)
 
